@@ -117,7 +117,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 sudo ./nats-sample/run.sh
 ```
 
-**실행 취소 및 프로세스 종료** 백그라운드에서 실행 중인 run.sh 프로세스를 종료하려면 다음 명령어를 사용합니다.
+**실행 취소 및 프로세스 종료** 백그라운드에서 실행 중인 run.sh 프로세스를 종료(docker process 로딩)하려면 다음 명령어를 사용합니다.
 ```bash
 sudo pkill -f "run.sh"
 ```
