@@ -45,6 +45,7 @@ DB_USER=root
 DB_PASSWORD=password
 DB_NAME=shotai_monitor
 # 주의: DB_NAME은 아래 데이터베이스 생성 단계에서 만든 이름과 일치해야 합니다.
+# 주의: DB_USER, DB_PASSWORD는 아래 사용자 생성 단계에서 만든 이름과 일치해야 합니다.
 
 # 로깅 레벨
 LOG_LEVEL=INFO
