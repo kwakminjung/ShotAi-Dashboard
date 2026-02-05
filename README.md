@@ -113,7 +113,6 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 ### SBC Status Monitor docker 실행
 
-**SBC Status Monitor 실행**
 ```bash
 sudo ./nats-sample/run.sh
 ```
