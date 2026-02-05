@@ -1,6 +1,16 @@
-# ShotAI Monitoring System
+# ShotAi Monitoring System
 
-이 프로젝트는 ShotAI 시스템의 상태를 모니터링하기 위한 대시보드 입니다.
+이 프로젝트는 **국립공주대학교 소프트웨어중심대학사업**의 일환으로 진행된 인턴십 프로젝트 결과물입니다.
+ShotAi의 SBC와 Triton Inference Server의 시스템 리소스(CPU, GPU, Memory, Network) 및 추론 결과를 실시간으로 수집하고 시각화하여 서비스 운영을 지원하기 위해 개발되었습니다.
+
+**Details**
+* **회사명**: 샷에이아이(ShotAi)
+* **기간**: 2025.12.17 ~ 2026.01.31 (약 6주)
+* **소속**: 국립공주대학교 인턴십 (참여학생: 곽민정)
+* **근무 형태**: 재택근무 (대구)
+
+**Overview**
+<img width="1902" height="813" alt="image" src="https://github.com/user-attachments/assets/4f3c96d0-277f-48f5-9ecc-625eab03c703" />
 
 **Quick Start**
 ```bash
