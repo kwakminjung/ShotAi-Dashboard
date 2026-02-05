@@ -1,6 +1,6 @@
 # ShotAi Monitoring System
 
-이 프로젝트는 **국립공주대학교 소프트웨어중심대학사업**의 일환으로 진행된 인턴십 프로젝트 결과물입니다.
+이 프로젝트는 **국립공주대학교 소프트웨어중심대학사업**의 일환으로 진행된 **샷에이아이(ShotAi)** 인턴십 프로젝트 결과물입니다.
 ShotAi의 SBC와 Triton Inference Server의 시스템 리소스(CPU, GPU, Memory, Network) 및 추론 결과를 실시간으로 수집하고 시각화하여 서비스 운영을 지원하기 위해 개발되었습니다.
 
 **Details**
