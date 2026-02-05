@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-chart-line"></i> 
+            <span>System Monitor</span>
+        </div>
+        <div class="status-indicator">
+            <span id="connection-status" class="status-badge disconnected">Disconnected</span>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-split">
+            
+            <div class="column-section">
+                
+                <div>
+                    <div class="section-title">
+                        <i class="fa-solid fa-microchip"></i> Triton Server Resources
+                    </div>
+                    
+                    <div class="grid-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        
+                        <div class="panel">
+                            <div class="panel-header">Compute Utilization (%)</div>
+                            <div class="chart-container">
+                                <canvas id="tritonUtilChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">GPU Load</span>
+                                    <span id="triton-gpu-util" class="stat-value text-green">--%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">CPU Load</span>
+                                    <span id="triton-cpu-util" class="stat-value text-blue">--%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">Memory Usage (%)</div>
+                            <div class="chart-container">
+                                <canvas id="tritonMemChart"></canvas>
+                            </div>
+                            
+                            <div class="single-stat-row" style="margin-top: 5px;">
+                                <div class="stat-item">
+                                    <span class="stat-label">GPU VRAM (Used / Total)</span>
+                                    <span class="stat-value">
+                                        <span id="triton-gpu-mem-used" class="text-green">--</span> / 
+                                        <span id="triton-gpu-mem-total">-- GB</span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="single-stat-row" style="border-top: 1px solid #2c3235; padding-top: 5px; margin-top: 5px;">
+                                <div class="stat-item">
+                                    <span class="stat-label">CPU RAM (Used / Total)</span>
+                                    <span class="stat-value">
+                                        <span id="triton-cpu-mem-used" class="text-blue">--</span> / 
+                                        <span id="triton-cpu-mem-total">-- GB</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="grid-column: span 2;">
+                            <div class="panel-header">GPU Power Consumption (Watts)</div>
+                            <div class="chart-container">
+                                <canvas id="tritonPowerChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">Usage / Limit</span>
+                                    <span class="stat-value">
+                                        <span id="triton-gpu-power-usage" class="text-orange">-- W</span> / 
+                                        <span id="triton-gpu-power-limit" class="text-blue">-- W</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">
+                        <i class="fa-solid fa-bullseye"></i> Inference Results
+                    </div>
+                    <div class="grid-container" style="grid-template-columns: 1fr;"> 
+                        <div class="panel">
+                            <div class="panel-header">Accuracy Metrics</div>
+                            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                <span class="stat-label">PCK (Accuracy)</span>
+                                <span id="inf-pck" class="stat-value text-green" style="font-size: 2.5rem;">--%</span>
+                                <span class="stat-label" style="margin-top: 5px;">Threshold: <span id="inf-thresh">--</span> px</span>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">MAE</span>
+                                    <span id="inf-mae" class="stat-value text-orange">-- px</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">RMSE</span>
+                                    <span id="inf-rmse" class="stat-value text-red">-- px</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="panel">
+                                <div class="panel-header">Performance</div>
+                                <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                                    <span id="inf-time" class="stat-value text-blue" style="font-size: 1.8rem;">-- s</span>
+                                </div>
+                                <div class="single-stat-row">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Total / Pred / Vis</span>
+                                        <span class="stat-value" style="font-size: 1rem;">
+                                            <span id="inf-total-frames">--</span> / <span id="inf-pred-frames" class="text-yellow">--</span> / <span id="inf-vis-frames">--</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel">
+                                <div class="panel-header">Metadata</div>
+                                <table class="data-table" style="margin: auto 0;">
+                                    <tbody>
+                                        <tr>
+                                            <td>Client</td>
+                                            <td id="inf-client-id" class="text-blue" style="text-align: right;">--</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Timestamp</td>
+                                            <td id="inf-timestamp" class="text-blue" style="text-align: right;">--</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Prediction Format</td>
+                                            <td id="inf-pred-fmt" style="text-align: right;">--</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ground Truth Format</td>
+                                            <td id="inf-gt-fmt" style="text-align: right;">--</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> 
+            
+            <div class="column-section">
+                
+                <div>
+                    <div class="section-title">
+                        <i class="fa-solid fa-server"></i> SBC Hardware
+                    </div>
+                    <div class="grid-container" style="grid-template-columns: 1fr 1fr;">
+                        
+                        <div class="panel">
+                            <div class="panel-header">CPU Load</div>
+                            <div class="chart-container">
+                                <canvas id="sbcCpuChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">Current</span>
+                                    <span id="sbc-cpu-val" class="stat-value text-green">--%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">Temperature</div>
+                            <div class="chart-container">
+                                <canvas id="sbcTempChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">Current</span>
+                                    <span id="sbc-temp-val" class="stat-value text-orange">--°C</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">Memory</div>
+                            <div class="chart-container">
+                                <canvas id="sbcMemChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">Total / Used</span>
+                                    <span id="sbc-mem-total" class="stat-value">--</span> / <span id="sbc-mem-used" class="stat-value">-- GB</span>(<span id="sbc-mem-percent" class="stat-value">--%</span>)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">SBC GPU Load</div>
+                                <div class="chart-container">
+                                    <canvas id="sbcGpuChart"></canvas>
+                                </div>
+                                <div class="single-stat-row">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Current</span>
+                                        <span id="sbc-gpu-percent" class="stat-value text-green">--%</span>
+                                    </div>  
+                                </div>
+                            </div>
+                        <div class="panel">
+                            <div class="panel-header">Disk usage (%)</div>
+                            <div class="chart-container">
+                                <canvas id="sbcDiskChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">Used percent</span>
+                                    <span id="sbc-disk-percent" class="stat-value">--%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">Network (Mbps)</div>
+                            <div class="chart-container">
+                                <canvas id="sbcNetChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">
+                        <i class="fa-brands fa-docker"></i> System Software
+                    </div>
+                    <div class="grid-container" style="grid-template-columns: 1fr;">
+                        
+                        <div class="panel" style="height: 200px;">
+                            <div class="panel-header">Network Latency & Loss</div>
+                            <div class="chart-container">
+                                <canvas id="sbcLatencyChart"></canvas>
+                            </div>
+                            <div class="single-stat-row">
+                                <div class="stat-item">
+                                    <span class="stat-label">Packet Loss</span>
+                                    <span id="sbc-loss-val" class="stat-value text-red">--%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="panel" style="height: 300px; overflow-y: auto;">
+                                <div class="panel-header">Docker Containers</div>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>CPU</th>
+                                            <th>MEM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="docker-table-body">
+                                        <tr><td colspan="4" style="text-align:center;">No Data</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="panel" style="height: 300px; overflow-y: auto;">
+                                <div class="panel-header">Top Processes</div>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>PID</th>
+                                            <th>NAME</th>
+                                            <th>CPU</th>
+                                            <th>MEM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="proc-table-body">
+                                        <tr><td colspan="4" style="text-align:center;">Waiting...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div> 
+        </div> 
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
