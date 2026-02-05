@@ -2,6 +2,11 @@
 
 이 프로젝트는 ShotAI 시스템의 상태를 모니터링하기 위한 대시보드 입니다.
 
+**Quick Start**
+```bash
+git clone https://github.com/kwakminjung/ShotAi-Dashboard.git
+```
+
 ## 1. 환경 설정 (Configuration)
 
 프로젝트 루트에 있는 `.env.example` 파일을 복사하여 `.env` 파일을 생성하고, 환경에 맞게 내용을 수정합니다.
