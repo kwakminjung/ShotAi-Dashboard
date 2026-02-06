@@ -11,6 +11,8 @@ ShotAi의 SBC와 Triton Inference Server의 시스템 리소스(CPU, GPU, Memory
 
 **Overview**
 <img width="1902" height="813" alt="image" src="https://github.com/user-attachments/assets/4f3c96d0-277f-48f5-9ecc-625eab03c703" />
+<img width="1965" height="845" alt="image" src="https://github.com/user-attachments/assets/0a773d99-9007-4e59-b037-bf81ac2bd840" />
+
 
 **Quick Start**
 ```bash
