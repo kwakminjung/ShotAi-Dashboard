@@ -85,27 +85,12 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-## 3. 가상환경 설정 (Virtual Environment)
+## 4. Docker 실행
 
-Python 가상환경을 생성 및 활성화하고 필요한 라이브러리를 설치합니다.
-
-```bash
-# 가상환경 활성화 (Linux/Mac)
-source .venv/bin/activate
-
-# 의존성 패키지 설치
-pip install -r requirements.txt
-
-# (선택 사항) 작업 완료 후 가상환경 비활성화 시
-# deactivate
-```
-
-## 4. FastAPI 서버 실행
-
-가상환경이 활성화된 상태(`.venv`)에서 API 서버를 실행합니다.
+Docker ver: 29.0.0
 
 ```bash
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+ShotAi-Dashboard $ ./run.sh
 ```
 
 서버가 실행되면 브라우저에서 아래 주소로 접속하여 정상 작동을 확인합니다.
