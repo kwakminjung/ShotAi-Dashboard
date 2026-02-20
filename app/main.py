@@ -34,13 +34,13 @@ async def lifespan(app: FastAPI):
 
     try:
         p1 = subprocess.Popen(
-            [sys.executable, "nats_stream.py", "--nats", NATS_SERVER]
+            [sys.executable, "app/nats/nats_stream.py", "--nats", NATS_SERVER]
         )
         workers.append(p1)
         logger.info(f"Started nats_stream.py (PID: {p1.pid})")
 
         p2 = subprocess.Popen(
-            [sys.executable, "nats_inference_worker.py", "--nats", NATS_SERVER]
+            [sys.executable, "app/nats/nats_inference_worker.py", "--nats", NATS_SERVER]
         )
         workers.append(p2)
         logger.info(f"Started nats_inference_worker.py (PID: {p2.pid})")

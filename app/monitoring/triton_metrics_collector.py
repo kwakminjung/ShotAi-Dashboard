@@ -93,7 +93,7 @@ async def fetch_triton_metrics() -> dict:
             # logger.debug(f"Response (first 1000 chars):\n{response.text[:1000]}")
             return parse_metrics(response.text)
     except Exception as e:
-        logger.error(f"Failed to fetch Triton metrics: {e}")
+        logger.error(f"Failed to fetch Triton metrics:{repr(e)}")
         return None
 
 
