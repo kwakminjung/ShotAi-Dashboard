@@ -10,8 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from config import NATS_SERVER, LOG_LEVEL
-from database import (
+from app.config import NATS_SERVER, LOG_LEVEL
+from app.database import (
     init_db, 
     save_monitor_metric, 
     get_latest_metric, 
@@ -19,7 +19,7 @@ from database import (
     save_inference_metric,
     get_latest_inference_metric,
 )
-from triton_metrics_collector import start_metrics_collector
+from app.monitoring.triton_metrics_collector import start_metrics_collector
 
 logging.basicConfig(level=getattr(logging, LOG_LEVEL.upper(), logging.INFO))
 logger = logging.getLogger("FastAPI")

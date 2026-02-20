@@ -10,7 +10,7 @@ import time
 
 import nats
 from nats.errors import NoServersError
-from config import API_BASE_URL, LOG_LEVEL
+from app.config import API_BASE_URL, LOG_LEVEL
 
 LOG = logging.getLogger("nats-inf-worker")
 

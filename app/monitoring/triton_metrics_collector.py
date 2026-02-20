@@ -4,8 +4,8 @@ import re
 from datetime import datetime, timezone, timedelta
 import httpx
 
-from config import TRITON_SERVER
-from database import save_triton_metric
+from app.config import TRITON_SERVER
+from app.database import save_triton_metric
 
 logger = logging.getLogger("triton_metrics_collector")
 logging.basicConfig(level=logging.INFO)
