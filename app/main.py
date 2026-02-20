@@ -19,7 +19,7 @@ from app.database import (
     save_inference_metric,
     get_latest_inference_metric,
 )
-from app.monitoring.triton_metrics_collector import start_metrics_collector
+from app.triton_metrics.triton_metrics_collector import start_metrics_collector
 
 logging.basicConfig(level=getattr(logging, LOG_LEVEL.upper(), logging.INFO))
 logger = logging.getLogger("FastAPI")
