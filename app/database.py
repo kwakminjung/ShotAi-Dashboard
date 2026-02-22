@@ -75,9 +75,6 @@ class Metric(Base):
     drops = Column(Integer, nullable=True)
     errors = Column(Integer, nullable=True)
     packet_loss_percent = Column(Float, nullable=True)
-    
-    # 원본 데이터
-    raw_data = Column(JSON, nullable=True)
 
 
 class TritonMetric(Base):
@@ -100,9 +97,6 @@ class TritonMetric(Base):
     cpu_memory_total_gb = Column(Float, nullable=True)
     cpu_memory_used_gb = Column(Float, nullable=True)
     cpu_memory_percent = Column(Float, nullable=True)
-    
-    # 원본 데이터
-    raw_data = Column(JSON, nullable=True)
 
 class InferenceMetric(Base):
     __tablename__ = "inference_metrics"
@@ -120,9 +114,6 @@ class InferenceMetric(Base):
     elapsed_sec = Column(Float, nullable=True)
     pred_format = Column(String(50), nullable=True)
     gt_format = Column(String(50), nullable=True)
-
-    # 원본 데이터
-    raw_data = Column(JSON, nullable=True)
 
 def init_db():
     try:
@@ -147,6 +138,7 @@ def get_db():
     finally:
         db.close()
 
+# save functions
 
 async def save_monitor_metric(data: dict):
     db = SessionLocal()
@@ -239,8 +231,6 @@ async def save_triton_metric(metrics: dict):
             cpu_memory_total_gb=cpu_memory_total_gb,
             cpu_memory_used_gb=cpu_memory_used_gb,
             cpu_memory_percent=cpu_memory_percent,
-            
-            raw_data=json.dumps(metrics, default=str),
         )
         
         logger.debug("Created TritonMetric object, adding to session...")
@@ -286,7 +276,6 @@ async def save_inference_metric(data: dict):
             elapsed_sec=data.get("elapsed_sec"),
             pred_format=data.get("pred_format"),
             gt_format=data.get("gt_format"),
-            raw_data=json.dumps(data, default=str)
         )
         
         db.add(metric)
@@ -298,6 +287,8 @@ async def save_inference_metric(data: dict):
         logger.error(f"Failed to save inference metric: {e}")
     finally:
         db.close()
+
+# get functions
 
 def get_latest_metric():
     db = SessionLocal()

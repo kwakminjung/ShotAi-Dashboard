@@ -147,16 +147,9 @@ async def save_metrics_to_db(metrics: dict):
 
     logger.info("Calling save_triton_metric...")
     await save_triton_metric(metrics)
-    
-    # logger.info(
-    #     f"Saved metrics - GPU: {metrics['gpu']['utilization']}%, "
-    #     f"CPU: {metrics['cpu']['utilization']}%, "
-    #     f"GPU Memory: {gpu_memory_used_gb:.2f}GB/{gpu_memory_total_gb:.2f}GB" if gpu_memory_used_gb and gpu_memory_total_gb else "N/A"
-    # )
 
 
 async def start_metrics_collector(interval: int = 1):
-    """5초 간격으로 메트릭 수집 시작"""
     logger.info(f"Starting Triton metrics collector (interval: {interval}s)")
 
     while True:

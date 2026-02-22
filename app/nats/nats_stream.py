@@ -69,7 +69,6 @@ async def main_async():
                 payload = {
                     "type": "monitor",
                     "timestamp": formatted_ts,
-                    "content": raw_data  # 원본 전체 데이터
                 }
                 LOG.debug("Monitor data received")
 
@@ -79,11 +78,9 @@ async def main_async():
         except Exception as e:
             LOG.error(f"Error processing message: {e}")
 
-    # 구독 시작
     await nc.subscribe("shotai.sbc.heartbeat.*", cb=on_msg)
     await nc.subscribe("shotai.sbc.monitor.*", cb=on_msg)
 
-    # 무한 대기
     while True:
         await asyncio.sleep(1)
 
