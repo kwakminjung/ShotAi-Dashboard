@@ -16,7 +16,7 @@ ShotAi의 SBC와 Triton Inference Server의 시스템 리소스(CPU, GPU, Memory
 
 **Quick Start**
 ```bash
-git clone https://github.com/kwakminjung/ShotAi-Dashboard.git
+/$ git clone https://github.com/kwakminjung/ShotAi-Dashboard.git
 ```
 
 ## 1. 환경 설정 (Configuration)
@@ -24,11 +24,12 @@ git clone https://github.com/kwakminjung/ShotAi-Dashboard.git
 프로젝트 루트에 있는 `.env.example` 파일을 복사하여 `.env` 파일을 생성하고, 환경에 맞게 내용을 수정합니다.
 
 ```bash
-cp .env.example .env
-vi .env
+/$ cd ShotAi-Dashboard
+/ShotAi-Dashboard$ cp .env.example .env
+/ShotAi-Dashboard$ vi .env
 ```
 
-`.env` 설정 예시
+`.env` 설정 예시 (.txt 파일 전달)
 ```bash
 # Triton Server 설정
 TRITON_SERVER=https://tritonserver
@@ -59,9 +60,9 @@ MySQL이 설치되어 있지 않다면 설치를 진행하고, 데이터베이�
 
 ### 2-1. MySQL 설치 및 서비스 시작
 ```bash
-sudo apt install mysql-server
-sudo ufw allow mysql
-sudo systemctl start mysql
+/ShotAi-Dashboard$ sudo apt install mysql-server
+/ShotAi-Dashboard$ sudo ufw allow mysql
+/ShotAi-Dashboard$ sudo systemctl start mysql
 ```
 
 ### 2-2. 데이터베이스 및 사용자 생성
@@ -69,20 +70,20 @@ sudo systemctl start mysql
 MySQL 쉘에 접속하여 다음 명령어들을 순차적으로 실행합니다.
 
 ```bash
-$ sudo mysql -u root
+/ShotAi-Dashboard$ sudo mysql -u root
 
 -- 데이터베이스 생성
-CREATE DATABASE shotai_monitor;
+mysql> CREATE DATABASE shotai-monitor;
 
 -- 사용자 생성 (<username>과 <password>를 실제 사용할 값으로 변경하세요)
-CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
+mysql> CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
 
 -- 권한 부여
-GRANT ALL PRIVILEGES ON shotai_monitor.* TO '<username>'@'localhost';
+mysql> GRANT ALL PRIVILEGES ON shotai_monitor.* TO '<username>'@'localhost';
 
 -- 권한 적용 및 종료
-FLUSH PRIVILEGES;
-EXIT;
+mysql> FLUSH PRIVILEGES;
+mysql> EXIT;
 ```
 
 ## 4. Docker 실행
@@ -90,26 +91,22 @@ EXIT;
 Docker ver: 29.0.0
 
 ```bash
-ShotAi-Dashboard $ ./run.sh
+
+/ShotAi-Dashboard$ ./run.sh
 ```
 
 서버가 실행되면 브라우저에서 아래 주소로 접속하여 정상 작동을 확인합니다.
 - 접속 주소: http://localhost:8000/
 
-## 5. SBC / Triton 추론 모니터링 실행 (SBC 에서 실행)
+## 5. SBC / Triton 추론 모니터링 실행 (SBC 에서 실행, 2개의 실행창 필요)
 
 ### SBC Status Monitor docker 실행
 
 ```bash
-sudo ./nats-sample/run.sh
-```
-
-**실행 취소 및 프로세스 종료** 백그라운드에서 실행 중인 run.sh 프로세스를 종료(docker process 로딩)하려면 다음 명령어를 사용합니다.
-```bash
-sudo pkill -f "run.sh"
+/$ sudo ./nats-sample/run.sh
 ```
 
 ### Triton AI Inference docker 실행
 ```bash
-sudo ./triton_test/run_ffmpeg_triton_eval.sh
+/$ sudo ./triton_test/run_ffmpeg_triton_eval.sh
 ```
