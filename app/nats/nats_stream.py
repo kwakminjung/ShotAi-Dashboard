@@ -69,6 +69,7 @@ async def main_async():
                 payload = {
                     "type": "monitor",
                     "timestamp": formatted_ts,
+                    "content": raw_data,
                 }
                 LOG.debug("Monitor data received")
 

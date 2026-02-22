@@ -169,7 +169,7 @@ function processSbcData(content, timestamp) {
     setSafeText('sbc-mem-percent', (mem.percent || 0).toFixed(1) + '%');
     setSafeText('sbc-mem-total', (mem.total_gb || 0).toFixed(1) + ' GB');
     setSafeText('sbc-gpu-percent', (comp.gpu_percent || 0).toFixed(1) + '%');
-    setSafeText('sbc-disk-percent', (comp.disk_percent || 0).toFixed(1) + '%');
+    setSafeText('sbc-disk-percent', (comp.disk || 0).toFixed(1) + '%');
     setSafeText('sbc-loss-val', (net.packet_loss || 0).toFixed(2) + '%');
 
     if (comp.proc_top) {
